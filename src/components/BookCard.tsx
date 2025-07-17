@@ -1,8 +1,9 @@
 
 import React from 'react';
-import { Star, Clock, Eye } from 'lucide-react';
+import { Star, Eye } from 'lucide-react';
 import { Book } from '@/types';
 import { Button } from '@/components/ui/button';
+import { useApp } from '@/contexts/AppContext';
 
 interface BookCardProps {
   book: Book;
@@ -10,6 +11,8 @@ interface BookCardProps {
 }
 
 const BookCard: React.FC<BookCardProps> = ({ book, onClick }) => {
+  const { selectedChild } = useApp();
+
   return (
     <div className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden cursor-pointer animate-fade-in">
       <div className="relative overflow-hidden" onClick={onClick}>
@@ -20,6 +23,17 @@ const BookCard: React.FC<BookCardProps> = ({ book, onClick }) => {
           loading="lazy"
         />
         
+        {/* Child's photo overlay when available */}
+        {selectedChild?.photo && (
+          <div className="absolute bottom-3 right-3">
+            <img
+              src={selectedChild.photo}
+              alt={selectedChild.name}
+              className="w-12 h-12 rounded-full border-3 border-white shadow-lg object-cover"
+            />
+          </div>
+        )}
+
         {/* Age badge */}
         <div className="absolute top-3 left-3">
           <span className="bg-memo-peach text-gray-800 text-xs font-semibold px-2 py-1 rounded-full">

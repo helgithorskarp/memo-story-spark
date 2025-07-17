@@ -84,6 +84,18 @@ const BookDetailModal: React.FC<BookDetailModalProps> = ({ book, isOpen, onClose
                       alt={`${book.title} cover`}
                       className="w-full h-80 object-cover rounded-2xl shadow-lg"
                     />
+                    
+                    {/* Child's photo overlay when available */}
+                    {selectedChild?.photo && (
+                      <div className="absolute bottom-4 right-4">
+                        <img
+                          src={selectedChild.photo}
+                          alt={selectedChild.name}
+                          className="w-16 h-16 rounded-full border-4 border-white shadow-lg object-cover"
+                        />
+                      </div>
+                    )}
+
                     <div className="absolute top-4 left-4">
                       <span className="bg-memo-peach text-gray-800 text-sm font-semibold px-3 py-1 rounded-full">
                         Ages {book.ageRange}
@@ -142,7 +154,7 @@ const BookDetailModal: React.FC<BookDetailModalProps> = ({ book, isOpen, onClose
                     
                     <div className="mt-3 p-3 bg-white rounded-lg">
                       <p className="text-sm text-gray-700 font-poppins">
-                        {getPersonalizedText(`"And then ${selectedChild ? selectedChild.name : '[Your Child\'s Name]'} discovered the magical door that would change everything..."`)}
+                        {getPersonalizedText(`"And then ${selectedChild ? selectedChild.name : '[Your Child\'s Name]'} discovered that true courage comes from helping others..."`)}
                       </p>
                     </div>
                   </div>
