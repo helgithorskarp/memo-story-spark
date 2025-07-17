@@ -13,36 +13,38 @@ interface BookCardProps {
 const BookCard: React.FC<BookCardProps> = ({ book, onClick }) => {
   const { selectedChild } = useApp();
 
+  // Use personalized cover if available, otherwise use default book cover
+  const coverImage = selectedChild?.personalizedCovers?.[book.id] || book.cover;
+
   return (
     <div className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden cursor-pointer animate-fade-in">
       <div className="relative overflow-hidden" onClick={onClick}>
         <img
-          src={book.cover}
+          src={coverImage}
           alt={`${book.title} book cover`}
           className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
           loading="lazy"
         />
         
-        {/* Child's photo overlay when available */}
-        {selectedChild?.photo && (
-          <div className="absolute bottom-3 right-3">
-            <img
-              src={selectedChild.photo}
-              alt={selectedChild.name}
-              className="w-12 h-12 rounded-full border-3 border-white shadow-lg object-cover"
-            />
+        {/* Personalization indicator when using custom cover */}
+        {selectedChild?.personalizedCovers?.[book.id] && (
+          <div className="absolute top-3 left-3">
+            <span className="bg-green-500 text-white text-xs font-semibold px-2 py-1 rounded-full flex items-center space-x-1">
+              <div className="w-2 h-2 bg-white rounded-full"></div>
+              <span>Personalized</span>
+            </span>
           </div>
         )}
 
         {/* Age badge */}
-        <div className="absolute top-3 left-3">
+        <div className="absolute top-3 right-3">
           <span className="bg-memo-peach text-gray-800 text-xs font-semibold px-2 py-1 rounded-full">
             Ages {book.ageRange}
           </span>
         </div>
 
         {/* Theme badge */}
-        <div className="absolute top-3 right-3">
+        <div className="absolute bottom-3 right-3">
           <span className="bg-memo-blue text-gray-800 text-xs font-semibold px-2 py-1 rounded-full">
             {book.theme}
           </span>
@@ -62,11 +64,14 @@ const BookCard: React.FC<BookCardProps> = ({ book, onClick }) => {
 
       <div className="p-4" onClick={onClick}>
         <h3 className="font-bold text-lg text-gray-800 mb-2 font-nunito group-hover:text-orange-600 transition-colors">
-          {book.title}
+          {selectedChild ? book.title.replace(/\[Child's Name\]/g, selectedChild.name) : book.title}
         </h3>
         
         <p className="text-gray-600 text-sm mb-3 font-poppins line-clamp-2">
-          {book.synopsis}
+          {selectedChild 
+            ? book.synopsis.replace(/\[Child's Name\]/g, selectedChild.name) 
+            : book.synopsis.replace(/\[Child's Name\]/g, "[Your Child's Name]")
+          }
         </p>
 
         <div className="flex items-center justify-between">

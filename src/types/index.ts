@@ -1,18 +1,3 @@
-
-export interface Child {
-  id: string;
-  name: string;
-  pronouns: string;
-  favoriteColor: string;
-  photo?: string;
-}
-
-export interface Author {
-  name: string;
-  photo: string;
-  bio: string;
-}
-
 export interface Book {
   id: string;
   title: string;
@@ -27,6 +12,21 @@ export interface Book {
     ebook: number;
     hardcover: number;
   };
+}
+
+export interface Author {
+  name: string;
+  photo: string;
+  bio: string;
+}
+
+export interface Child {
+  id: string;
+  name: string;
+  photo?: string;
+  pronouns?: string;
+  favoriteColor?: string;
+  personalizedCovers?: { [bookId: string]: string }; // AI-generated personalized cover URLs
 }
 
 export interface CartItem {

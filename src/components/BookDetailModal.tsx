@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { X, Star, ShoppingCart, ChevronLeft, ChevronRight, User, Heart } from 'lucide-react';
 import { Book } from '@/types';
@@ -20,6 +19,9 @@ const BookDetailModal: React.FC<BookDetailModalProps> = ({ book, isOpen, onClose
   const [quantity, setQuantity] = useState(1);
   const [currentDemoPage, setCurrentDemoPage] = useState(0);
   const [isAddChildModalOpen, setIsAddChildModalOpen] = useState(false);
+
+  // Use personalized cover if available, otherwise use default book cover
+  const coverImage = selectedChild?.personalizedCovers?.[book.id] || book.cover;
 
   const handleAddToCart = () => {
     const price = selectedFormat === 'ebook' ? book.price.ebook : book.price.hardcover;
@@ -61,7 +63,7 @@ const BookDetailModal: React.FC<BookDetailModalProps> = ({ book, isOpen, onClose
             {/* Header */}
             <div className="sticky top-0 z-10 bg-white border-b p-4 flex items-center justify-between">
               <h2 className="text-2xl font-bold text-gray-800 font-nunito">
-                {book.title}
+                {selectedChild ? book.title.replace(/\[Child's Name\]/g, selectedChild.name) : book.title}
               </h2>
               <Button
                 variant="ghost"
@@ -80,29 +82,27 @@ const BookDetailModal: React.FC<BookDetailModalProps> = ({ book, isOpen, onClose
                   {/* Book Cover */}
                   <div className="relative">
                     <img
-                      src={book.cover}
+                      src={coverImage}
                       alt={`${book.title} cover`}
                       className="w-full h-80 object-cover rounded-2xl shadow-lg"
                     />
                     
-                    {/* Child's photo overlay when available */}
-                    {selectedChild?.photo && (
-                      <div className="absolute bottom-4 right-4">
-                        <img
-                          src={selectedChild.photo}
-                          alt={selectedChild.name}
-                          className="w-16 h-16 rounded-full border-4 border-white shadow-lg object-cover"
-                        />
+                    {/* Personalization indicator */}
+                    {selectedChild?.personalizedCovers?.[book.id] && (
+                      <div className="absolute top-4 left-4">
+                        <span className="bg-green-500 text-white text-sm font-semibold px-3 py-1 rounded-full flex items-center space-x-2">
+                          <div className="w-2 h-2 bg-white rounded-full"></div>
+                          <span>Personalized for {selectedChild.name}</span>
+                        </span>
                       </div>
                     )}
 
-                    <div className="absolute top-4 left-4">
-                      <span className="bg-memo-peach text-gray-800 text-sm font-semibold px-3 py-1 rounded-full">
+                    {/* Age and theme badges */}
+                    <div className="absolute top-4 right-4 space-y-2">
+                      <span className="bg-memo-peach text-gray-800 text-sm font-semibold px-3 py-1 rounded-full block">
                         Ages {book.ageRange}
                       </span>
-                    </div>
-                    <div className="absolute top-4 right-4">
-                      <span className="bg-memo-blue text-gray-800 text-sm font-semibold px-3 py-1 rounded-full">
+                      <span className="bg-memo-blue text-gray-800 text-sm font-semibold px-3 py-1 rounded-full block">
                         {book.theme}
                       </span>
                     </div>
@@ -168,9 +168,16 @@ const BookDetailModal: React.FC<BookDetailModalProps> = ({ book, isOpen, onClose
                       <Heart className={`w-5 h-5 ${selectedChild ? 'text-green-600' : 'text-yellow-600'}`} />
                       <div>
                         {selectedChild ? (
-                          <p className="text-green-800 font-semibold">
-                            Currently starring: {selectedChild.name}
-                          </p>
+                          <div>
+                            <p className="text-green-800 font-semibold">
+                              Currently starring: {selectedChild.name}
+                            </p>
+                            {!selectedChild.personalizedCovers?.[book.id] && (
+                              <p className="text-green-700 text-sm mt-1">
+                                Want a personalized cover? We can create one with AI!
+                              </p>
+                            )}
+                          </div>
                         ) : (
                           <div>
                             <p className="text-yellow-800 font-semibold mb-2">
