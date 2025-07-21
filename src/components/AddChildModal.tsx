@@ -28,7 +28,8 @@ const AddChildModal: React.FC<AddChildModalProps> = ({ isOpen, onClose }) => {
   });
   const [photo, setPhoto] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string>(selectedChild?.photo || '');
-  const [apiKey, setApiKey] = useState('');
+  const envApiKey = import.meta.env.VITE_RUNWARE_API_KEY as string | undefined;
+  const [apiKey, setApiKey] = useState(envApiKey || '');
   const [isGenerating, setIsGenerating] = useState(false);
 
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -176,7 +177,9 @@ const AddChildModal: React.FC<AddChildModalProps> = ({ isOpen, onClose }) => {
     setFormData({ name: '', pronouns: '', favoriteColor: '' });
     setPhoto(null);
     setPhotoPreview('');
-    setApiKey('');
+    if (!envApiKey) {
+      setApiKey('');
+    }
     onClose();
   };
 
@@ -191,32 +194,34 @@ const AddChildModal: React.FC<AddChildModalProps> = ({ isOpen, onClose }) => {
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-6 py-4">
-          {/* API Key Input */}
-          <Card className="border-amber-200 bg-amber-50">
-            <CardContent className="p-4">
-              <div className="flex items-start gap-2 mb-3">
-                <AlertCircle className="w-5 h-5 text-amber-600 mt-0.5" />
-                <div>
-                  <p className="text-sm text-amber-800 font-medium mb-1">
-                    AI Personalization (Optional)
-                  </p>
-                  <p className="text-xs text-amber-700">
-                    Enter your Runware API key to generate AI-personalized book covers with your child's photo.
-                  </p>
+          {/* API Key Input - hidden when provided via environment */}
+          {!envApiKey && (
+            <Card className="border-amber-200 bg-amber-50">
+              <CardContent className="p-4">
+                <div className="flex items-start gap-2 mb-3">
+                  <AlertCircle className="w-5 h-5 text-amber-600 mt-0.5" />
+                  <div>
+                    <p className="text-sm text-amber-800 font-medium mb-1">
+                      AI Personalization (Optional)
+                    </p>
+                    <p className="text-xs text-amber-700">
+                      Enter your Runware API key to generate AI-personalized book covers with your child's photo.
+                    </p>
+                  </div>
                 </div>
-              </div>
-              <Input
-                type="password"
-                placeholder="Enter Runware API key (optional)"
-                value={apiKey}
-                onChange={(e) => setApiKey(e.target.value)}
-                className="bg-white"
-              />
-              <p className="text-xs text-amber-600 mt-1">
-                Get your API key at <a href="https://runware.ai/" target="_blank" rel="noopener noreferrer" className="underline">runware.ai</a>
-              </p>
-            </CardContent>
-          </Card>
+                <Input
+                  type="password"
+                  placeholder="Enter Runware API key (optional)"
+                  value={apiKey}
+                  onChange={(e) => setApiKey(e.target.value)}
+                  className="bg-white"
+                />
+                <p className="text-xs text-amber-600 mt-1">
+                  Get your API key at <a href="https://runware.ai/" target="_blank" rel="noopener noreferrer" className="underline">runware.ai</a>
+                </p>
+              </CardContent>
+            </Card>
+          )}
 
           {/* Photo Upload */}
           <div>
