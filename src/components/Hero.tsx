@@ -69,8 +69,8 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
                 <div className="absolute inset-0 bg-gradient-to-br from-memo-peach/40 to-memo-blue/40 rounded-3xl transform rotate-3"></div>
                 <div className="relative bg-white rounded-3xl shadow-2xl overflow-hidden transform -rotate-1 hover:rotate-0 transition-transform duration-500">
                   <img
-                    src="https://images.unsplash.com/photo-1472396961693-142e6e269027?w=600&h=400&fit=crop"
-                    alt="A magical storybook scene with a child reading"
+                    src="/lovable-uploads/501be7b5-eff5-455c-9cd4-4be6507cf2fb.png"
+                    alt="Elsa from Frozen - example of personalized storybook"
                     className="w-full h-80 object-cover"
                   />
                   <div className="p-6 bg-gradient-to-r from-memo-peach to-memo-blue">
