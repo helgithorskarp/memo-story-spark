@@ -27,7 +27,6 @@ export interface Child {
   pronouns?: string;
   favoriteColor?: string;
   personalizedCovers?: { [bookId: string]: string }; // AI-generated personalized cover URLs
-  processedPhoto?: string; // Background-removed photo for AI generation
 }
 
 export interface CartItem {

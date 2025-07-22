@@ -71,13 +71,3 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
-
-## AI personalization
-
-To enable automatic generation of personalized book covers, the application uses the Runware API. Create a `.env` file at the project root with the following variable:
-
-```bash
-VITE_RUNWARE_API_KEY=YOUR_RUNWARE_API_KEY
-```
-
-An `.env.example` file is provided as a reference. When this variable is present, users won't be asked for the API key when uploading photos.
