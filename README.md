@@ -38,14 +38,7 @@ npm run dev
 
 ### Environment Variables
 
-Copy `.env.example` to `.env` and provide your Runway API key:
-
-```sh
-cp .env.example .env
-echo "VITE_RUNWAY_API_KEY=your-key" >> .env
-```
-
-The application reads this key using `import.meta.env.VITE_RUNWAY_API_KEY` to generate personalized images.
+This project includes a built-in Runway API key so you can try personalized images immediately. If you want to use your own key, copy `.env.example` to `.env` and update `VITE_RUNWAY_API_KEY`.
 
 **Edit a file directly in GitHub**
 

@@ -1,8 +1,7 @@
+const DEFAULT_RUNWAY_KEY = 'g1cidphAZjPjJCvhPKmb7DZ7SVdCkHRq';
+
 export async function editImage(childPhoto: string, templateImage: string): Promise<string> {
-  const apiKey = import.meta.env.VITE_RUNWAY_API_KEY;
-  if (!apiKey) {
-    throw new Error('Runway API key not configured');
-  }
+  const apiKey = import.meta.env.VITE_RUNWAY_API_KEY || DEFAULT_RUNWAY_KEY;
 
   const response = await fetch('https://api.runwayml.com/v1/query', {
     method: 'POST',
