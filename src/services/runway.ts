@@ -2,6 +2,9 @@ const DEFAULT_RUNWAY_KEY = 'g1cidphAZjPjJCvhPKmb7DZ7SVdCkHRq';
 
 export async function editImage(childPhoto: string, templateImage: string): Promise<string> {
   const apiKey = import.meta.env.VITE_RUNWAY_API_KEY || DEFAULT_RUNWAY_KEY;
+  const templateUrl = templateImage.startsWith('http')
+    ? templateImage
+    : new URL(templateImage, window.location.origin).href;
 
   const response = await fetch('https://api.runwayml.com/v1/query', {
     method: 'POST',
@@ -12,7 +15,7 @@ export async function editImage(childPhoto: string, templateImage: string): Prom
     body: JSON.stringify({
       input: {
         source_image: childPhoto,
-        target_image: templateImage,
+        target_image: templateUrl,
       },
     }),
   });
