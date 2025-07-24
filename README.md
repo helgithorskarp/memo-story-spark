@@ -36,6 +36,10 @@ npm i
 npm run dev
 ```
 
+### Environment Variables
+
+This project includes a built-in Runway API key so you can try personalized images immediately. If you want to use your own key, copy `.env.example` to `.env` and update `VITE_RUNWAY_API_KEY`.
+
 **Edit a file directly in GitHub**
 
 - Navigate to the desired file(s).
@@ -59,6 +63,13 @@ This project is built with:
 - React
 - shadcn-ui
 - Tailwind CSS
+
+### Personalized Story Images
+
+Upload a child's photo in the app to automatically generate book covers and
+demo pages featuring them. The application sends the uploaded photo and each
+story image to Runway's API to produce personalized results. If no photo is
+uploaded, the default artwork will be shown.
 
 ## How can I deploy this project?
 
