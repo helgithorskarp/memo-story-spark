@@ -7,7 +7,8 @@ import { Input } from '@/components/ui/input';
 import { useApp } from '@/contexts/AppContext';
 import { Child } from '@/types';
 import { books } from '@/data/books';
-import { editImage } from '@/services/runware';
+
+import { editImage } from '@/services/runway';
 import { toast } from '@/hooks/use-toast';
 
 interface AddChildModalProps {
