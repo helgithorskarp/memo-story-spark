@@ -22,6 +22,7 @@ const BookDetailModal: React.FC<BookDetailModalProps> = ({ book, isOpen, onClose
 
   // Use personalized cover if available, otherwise use default book cover
   const coverImage = selectedChild?.personalizedCovers?.[book.id] || book.cover;
+  const demoPages = selectedChild?.personalizedPages?.[book.id] || book.demoPages;
 
   const handleAddToCart = () => {
     const price = selectedFormat === 'ebook' ? book.price.ebook : book.price.hardcover;
@@ -48,11 +49,11 @@ const BookDetailModal: React.FC<BookDetailModalProps> = ({ book, isOpen, onClose
   };
 
   const nextDemoPage = () => {
-    setCurrentDemoPage((prev) => (prev + 1) % book.demoPages.length);
+    setCurrentDemoPage((prev) => (prev + 1) % demoPages.length);
   };
 
   const prevDemoPage = () => {
-    setCurrentDemoPage((prev) => (prev - 1 + book.demoPages.length) % book.demoPages.length);
+    setCurrentDemoPage((prev) => (prev - 1 + demoPages.length) % demoPages.length);
   };
 
   return (
@@ -115,7 +116,7 @@ const BookDetailModal: React.FC<BookDetailModalProps> = ({ book, isOpen, onClose
                     </h3>
                     <div className="relative">
                       <img
-                        src={book.demoPages[currentDemoPage]}
+                        src={demoPages[currentDemoPage]}
                         alt={`Demo page ${currentDemoPage + 1}`}
                         className="w-full h-48 object-cover rounded-xl"
                       />
@@ -141,7 +142,7 @@ const BookDetailModal: React.FC<BookDetailModalProps> = ({ book, isOpen, onClose
 
                       {/* Page indicators */}
                       <div className="flex justify-center mt-3 space-x-2">
-                        {book.demoPages.map((_, index) => (
+                        {demoPages.map((_, index) => (
                           <div
                             key={index}
                             className={`w-2 h-2 rounded-full transition-colors ${

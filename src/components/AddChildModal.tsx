@@ -6,6 +6,8 @@ import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { useApp } from '@/contexts/AppContext';
 import { Child } from '@/types';
+import { books } from '@/data/books';
+import { editImage } from '@/services/runware';
 import { toast } from '@/hooks/use-toast';
 
 interface AddChildModalProps {
@@ -22,7 +24,9 @@ const AddChildModal: React.FC<AddChildModalProps> = ({ isOpen, onClose }) => {
     photo: selectedChild?.photo || ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!formData.name.trim()) {
@@ -42,14 +46,45 @@ const AddChildModal: React.FC<AddChildModalProps> = ({ isOpen, onClose }) => {
       photo: formData.photo
     };
 
-    setSelectedChild(newChild);
-    
-    toast({
-      title: "Success!",
-      description: `All books now feature ${newChild.name}. Ready to start their adventure!`,
-    });
-    
-    onClose();
+    try {
+      setLoading(true);
+      if (formData.photo) {
+        toast({ title: 'Generating images...', description: 'Personalizing your books. This may take a moment.' });
+
+        const personalizedCovers: { [key: string]: string } = {};
+        const personalizedPages: { [key: string]: string[] } = {};
+
+        for (const book of books) {
+          try {
+            const cover = await editImage(formData.photo, book.cover);
+            personalizedCovers[book.id] = cover;
+
+            const pages = await Promise.all(
+              book.demoPages.map(page => editImage(formData.photo!, page))
+            );
+            personalizedPages[book.id] = pages;
+          } catch (err) {
+            console.error('Runway generation failed', err);
+          }
+        }
+
+        newChild.personalizedCovers = personalizedCovers;
+        newChild.personalizedPages = personalizedPages;
+        newChild.processedPhoto = formData.photo;
+      }
+
+      setSelectedChild(newChild);
+      toast({
+        title: 'Success!',
+        description: `All books now feature ${newChild.name}. Ready to start their adventure!`,
+      });
+      onClose();
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : 'Failed to personalize images.';
+      toast({ title: 'Error', description: message, variant: 'destructive' });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -194,9 +229,10 @@ const AddChildModal: React.FC<AddChildModalProps> = ({ isOpen, onClose }) => {
               </Button>
               <Button
                 type="submit"
+                disabled={loading}
                 className="flex-1 bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white"
               >
-                {selectedChild ? 'Update' : 'Save'} Profile
+                {loading ? 'Processing...' : selectedChild ? 'Update' : 'Save'} Profile
               </Button>
             </div>
           </form>
