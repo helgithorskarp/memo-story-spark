@@ -24,6 +24,7 @@ export interface Child {
   id: string;
   name: string;
   photo?: string;
+  teddyPhoto?: string;
   pronouns?: string;
   favoriteColor?: string;
   personalizedCovers?: { [bookId: string]: string }; // AI-generated personalized cover URLs
