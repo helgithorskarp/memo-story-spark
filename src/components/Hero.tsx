@@ -69,16 +69,16 @@ const Hero: React.FC<HeroProps> = ({ onNavigate }) => {
                 <div className="absolute inset-0 bg-gradient-to-br from-memo-peach/40 to-memo-blue/40 rounded-3xl transform rotate-3"></div>
                 <div className="relative bg-white rounded-3xl shadow-2xl overflow-hidden transform -rotate-1 hover:rotate-0 transition-transform duration-500">
                   <img
-                    src="/lovable-uploads/501be7b5-eff5-455c-9cd4-4be6507cf2fb.png"
-                    alt="Elsa from Frozen - example of personalized storybook"
+                    src="/lovable-uploads/6d112c7e-eb78-4a6f-b741-5479087afaee.png"
+                    alt="Career exploration book - example of personalized storybook"
                     className="w-full h-80 object-cover"
                   />
                   <div className="p-6 bg-gradient-to-r from-memo-peach to-memo-blue">
                     <h3 className="text-xl font-bold text-gray-800 mb-2 font-nunito">
-                      "Once upon a time, [Your Child's Name] discovered..."
+                      "Maybe [Your Child's Name] could be a firefighter!"
                     </h3>
                     <p className="text-gray-700 font-poppins">
-                      Every story becomes uniquely theirs ✨
+                      Endless possibilities await them ✨
                     </p>
                   </div>
                 </div>

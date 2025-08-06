@@ -101,42 +101,59 @@ const AddChildModal: React.FC<AddChildModalProps> = ({ isOpen, onClose }) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={() => onClose()}>
-      <DialogContent className="max-w-md">
-        <div className="relative">
+      <DialogContent className="max-w-2xl p-0 bg-gradient-to-br from-white to-memo-cream/50 border-0 shadow-2xl">
+        <div className="relative p-8">
+          {/* Decorative Background Elements */}
+          <div className="absolute top-0 right-0 w-32 h-32 bg-memo-peach/20 rounded-full blur-3xl -z-10"></div>
+          <div className="absolute bottom-0 left-0 w-24 h-24 bg-memo-blue/20 rounded-full blur-2xl -z-10"></div>
+          
           {/* Header */}
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center space-x-2">
-              <Heart className="w-6 h-6 text-red-500" />
-              <h2 className="text-2xl font-bold text-gray-800 font-nunito">
-                Add Your Little Hero
-              </h2>
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-orange-400 to-pink-500 rounded-full mb-4 shadow-lg">
+              <Heart className="w-8 h-8 text-white" />
             </div>
+            <h2 className="text-3xl font-bold text-gray-800 font-nunito mb-2">
+              Create Your Little Hero
+            </h2>
+            <p className="text-gray-600 font-poppins">
+              Let's make every story uniquely theirs
+            </p>
             <Button
               variant="ghost"
               size="sm"
               onClick={onClose}
-              className="h-8 w-8 p-0"
+              className="absolute top-4 right-4 h-10 w-10 p-0 rounded-full hover:bg-gray-100"
             >
-              <X className="w-4 h-4" />
+              <X className="w-5 h-5" />
             </Button>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Photo Upload */}
+          <form onSubmit={handleSubmit} className="space-y-8">
+            {/* Photo Upload Section */}
             <div className="text-center">
-              <div className="relative inline-block">
-                {formData.photo ? (
-                  <img
-                    src={formData.photo}
-                    alt="Child photo"
-                    className="w-24 h-24 rounded-full object-cover border-4 border-memo-peach"
-                  />
-                ) : (
-                  <div className="w-24 h-24 rounded-full bg-memo-cream border-4 border-memo-peach flex items-center justify-center">
-                    <Camera className="w-8 h-8 text-gray-400" />
-                  </div>
-                )}
-                <label htmlFor="photo-upload" className="absolute bottom-0 right-0 bg-orange-500 text-white rounded-full p-1 cursor-pointer hover:bg-orange-600 transition-colors">
+              <div className="relative inline-block mb-4">
+                <div className="relative group">
+                  {formData.photo ? (
+                    <div className="relative">
+                      <img
+                        src={formData.photo}
+                        alt="Child photo"
+                        className="w-32 h-32 rounded-2xl object-cover border-4 border-white shadow-xl"
+                      />
+                      <div className="absolute inset-0 bg-black/20 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                        <Upload className="w-6 h-6 text-white" />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="w-32 h-32 rounded-2xl bg-gradient-to-br from-memo-cream to-memo-peach/50 border-4 border-white shadow-xl flex items-center justify-center group-hover:shadow-2xl transition-shadow duration-300">
+                      <div className="text-center">
+                        <Camera className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                        <span className="text-xs text-gray-500 font-medium">Add Photo</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <label htmlFor="photo-upload" className="absolute -bottom-2 -right-2 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-full p-3 cursor-pointer hover:shadow-lg transform hover:scale-110 transition-all duration-200">
                   <Upload className="w-4 h-4" />
                 </label>
                 <input
@@ -147,93 +164,120 @@ const AddChildModal: React.FC<AddChildModalProps> = ({ isOpen, onClose }) => {
                   className="hidden"
                 />
               </div>
-              <p className="text-sm text-gray-500 mt-2">
-                Add a photo (optional)
+              <p className="text-sm text-gray-500 font-medium">
+                Upload a photo to personalize book covers
               </p>
             </div>
 
-            {/* Name */}
-            <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                Child's Name *
-              </label>
-              <Input
-                id="name"
-                type="text"
-                value={formData.name}
-                onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                placeholder="Enter your child's name"
-                className="w-full"
-                required
-              />
+            {/* Form Fields */}
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* Name */}
+              <div className="md:col-span-2">
+                <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-2">
+                  Child's Name *
+                </label>
+                <Input
+                  id="name"
+                  type="text"
+                  value={formData.name}
+                  onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                  placeholder="Enter your child's name"
+                  className="w-full h-12 text-lg border-2 border-gray-200 rounded-xl focus:border-orange-400 focus:ring-orange-400/20 bg-white/80 backdrop-blur-sm"
+                  required
+                />
+              </div>
+
+              {/* Pronouns */}
+              <div>
+                <label htmlFor="pronouns" className="block text-sm font-semibold text-gray-700 mb-2">
+                  Pronouns
+                </label>
+                <select
+                  id="pronouns"
+                  value={formData.pronouns}
+                  onChange={(e) => setFormData(prev => ({ ...prev, pronouns: e.target.value }))}
+                  className="w-full h-12 px-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-orange-400 bg-white/80 backdrop-blur-sm text-gray-700"
+                >
+                  <option value="they/them">they/them</option>
+                  <option value="she/her">she/her</option>
+                  <option value="he/him">he/him</option>
+                </select>
+              </div>
+
+              {/* Favorite Color */}
+              <div>
+                <label htmlFor="color" className="block text-sm font-semibold text-gray-700 mb-2">
+                  Favorite Color
+                </label>
+                <select
+                  id="color"
+                  value={formData.favoriteColor}
+                  onChange={(e) => setFormData(prev => ({ ...prev, favoriteColor: e.target.value }))}
+                  className="w-full h-12 px-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:border-orange-400 bg-white/80 backdrop-blur-sm text-gray-700"
+                >
+                  <option value="red">Red ❤️</option>
+                  <option value="blue">Blue 💙</option>
+                  <option value="green">Green 💚</option>
+                  <option value="purple">Purple 💜</option>
+                  <option value="pink">Pink 🩷</option>
+                  <option value="yellow">Yellow 💛</option>
+                  <option value="orange">Orange 🧡</option>
+                  <option value="rainbow">Rainbow 🌈</option>
+                </select>
+              </div>
             </div>
 
-            {/* Pronouns */}
-            <div>
-              <label htmlFor="pronouns" className="block text-sm font-medium text-gray-700 mb-1">
-                Pronouns
-              </label>
-              <select
-                id="pronouns"
-                value={formData.pronouns}
-                onChange={(e) => setFormData(prev => ({ ...prev, pronouns: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-              >
-                <option value="they/them">they/them</option>
-                <option value="she/her">she/her</option>
-                <option value="he/him">he/him</option>
-              </select>
+            {/* Benefits Card */}
+            <div className="bg-white/70 backdrop-blur-sm p-6 rounded-2xl border-2 border-memo-peach/30 shadow-lg">
+              <h3 className="font-bold text-gray-800 mb-3 font-nunito text-lg flex items-center">
+                <span className="mr-2">✨</span>
+                What happens next?
+              </h3>
+              <div className="grid md:grid-cols-2 gap-3">
+                <div className="flex items-center space-x-2">
+                  <span className="text-orange-500">🌟</span>
+                  <span className="text-sm text-gray-600">Becomes the story hero</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <span className="text-pink-500">📖</span>
+                  <span className="text-sm text-gray-600">Personalized previews</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <span className="text-blue-500">🎨</span>
+                  <span className="text-sm text-gray-600">Custom artwork</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <span className="text-purple-500">💝</span>
+                  <span className="text-sm text-gray-600">Lasting memories</span>
+                </div>
+              </div>
             </div>
 
-            {/* Favorite Color */}
-            <div>
-              <label htmlFor="color" className="block text-sm font-medium text-gray-700 mb-1">
-                Favorite Color
-              </label>
-              <select
-                id="color"
-                value={formData.favoriteColor}
-                onChange={(e) => setFormData(prev => ({ ...prev, favoriteColor: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
-              >
-                <option value="red">Red</option>
-                <option value="blue">Blue</option>
-                <option value="green">Green</option>
-                <option value="purple">Purple</option>
-                <option value="pink">Pink</option>
-                <option value="yellow">Yellow</option>
-                <option value="orange">Orange</option>
-                <option value="rainbow">Rainbow</option>
-              </select>
-            </div>
-
-            {/* Benefits */}
-            <div className="bg-memo-cream p-4 rounded-xl">
-              <h3 className="font-semibold text-gray-800 mb-2 font-nunito">What happens next?</h3>
-              <ul className="text-sm text-gray-600 space-y-1">
-                <li>✨ Your child becomes the star of every story</li>
-                <li>📚 Preview pages automatically update with their name</li>
-                <li>🎯 Personalized just for them</li>
-                <li>💝 Create lasting memories together</li>
-              </ul>
-            </div>
-
-            {/* Buttons */}
-            <div className="flex space-x-3">
+            {/* Action Buttons */}
+            <div className="flex space-x-4 pt-4">
               <Button
                 type="button"
                 variant="outline"
                 onClick={onClose}
-                className="flex-1"
+                className="flex-1 h-12 border-2 border-gray-300 hover:border-gray-400 rounded-xl font-semibold"
               >
                 Cancel
               </Button>
               <Button
                 type="submit"
                 disabled={loading}
-                className="flex-1 bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white"
+                className="flex-1 h-12 bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-[1.02] transition-all duration-200"
               >
-                {loading ? 'Processing...' : selectedChild ? 'Update' : 'Save'} Profile
+                {loading ? (
+                  <div className="flex items-center space-x-2">
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    <span>Processing...</span>
+                  </div>
+                ) : (
+                  <>
+                    {selectedChild ? 'Update' : 'Create'} Profile
+                  </>
+                )}
               </Button>
             </div>
           </form>
