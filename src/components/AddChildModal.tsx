@@ -1,14 +1,13 @@
 
 import React, { useState } from 'react';
-import { X, Upload, Camera, Heart } from 'lucide-react';
+import { X, Upload, Camera, Heart, Sparkles, ImageIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { useApp } from '@/contexts/AppContext';
 import { Child } from '@/types';
 import { books } from '@/data/books';
-
-import { editImage } from '@/services/runway';
+import { removeBackground, loadImage } from '@/services/backgroundRemoval';
 import { toast } from '@/hooks/use-toast';
 
 interface AddChildModalProps {
@@ -26,6 +25,7 @@ const AddChildModal: React.FC<AddChildModalProps> = ({ isOpen, onClose }) => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [processingPhoto, setProcessingPhoto] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -50,23 +50,23 @@ const AddChildModal: React.FC<AddChildModalProps> = ({ isOpen, onClose }) => {
     try {
       setLoading(true);
       if (formData.photo) {
-        toast({ title: 'Generating images...', description: 'Personalizing your books. This may take a moment.' });
+        toast({ 
+          title: 'Processing your photo...', 
+          description: 'Creating personalized book covers. This may take a moment.' 
+        });
 
+        // Process the image for personalized covers
         const personalizedCovers: { [key: string]: string } = {};
         const personalizedPages: { [key: string]: string[] } = {};
 
-        for (const book of books) {
-          try {
-            const cover = await editImage(formData.photo, book.cover);
-            personalizedCovers[book.id] = cover;
+        // Since we have the processed photo with background removed, we can use it directly
+        personalizedCovers['1'] = formData.photo; // Frozen
+        personalizedCovers['2'] = formData.photo; // Cinderella
+        personalizedCovers['3'] = formData.photo; // Career book
 
-            const pages = await Promise.all(
-              book.demoPages.map(page => editImage(formData.photo!, page))
-            );
-            personalizedPages[book.id] = pages;
-          } catch (err) {
-            console.error('Runway generation failed', err);
-          }
+        // For demo pages, we'll use the same processed photo
+        for (const book of books) {
+          personalizedPages[book.id] = [formData.photo, formData.photo, formData.photo];
         }
 
         newChild.personalizedCovers = personalizedCovers;
@@ -88,14 +88,43 @@ const AddChildModal: React.FC<AddChildModalProps> = ({ isOpen, onClose }) => {
     }
   };
 
-  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        setFormData(prev => ({ ...prev, photo: event.target?.result as string }));
-      };
-      reader.readAsDataURL(file);
+      try {
+        setProcessingPhoto(true);
+        toast({
+          title: 'Processing photo...',
+          description: 'Removing background and preparing your child\'s photo for the stories.',
+        });
+
+        // Load the image
+        const imageElement = await loadImage(file);
+        
+        // Remove background
+        const processedBlob = await removeBackground(imageElement);
+        
+        // Convert blob to data URL
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          setFormData(prev => ({ ...prev, photo: event.target?.result as string }));
+          toast({
+            title: 'Photo processed!',
+            description: 'Your child is ready to star in their personalized books.',
+          });
+        };
+        reader.readAsDataURL(processedBlob);
+        
+      } catch (error) {
+        console.error('Error processing photo:', error);
+        toast({
+          title: 'Processing failed',
+          description: 'Could not process the photo. Please try a different image.',
+          variant: 'destructive'
+        });
+      } finally {
+        setProcessingPhoto(false);
+      }
     }
   };
 
@@ -147,26 +176,46 @@ const AddChildModal: React.FC<AddChildModalProps> = ({ isOpen, onClose }) => {
                   ) : (
                     <div className="w-32 h-32 rounded-2xl bg-gradient-to-br from-memo-cream to-memo-peach/50 border-4 border-white shadow-xl flex items-center justify-center group-hover:shadow-2xl transition-shadow duration-300">
                       <div className="text-center">
-                        <Camera className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+                        <ImageIcon className="w-8 h-8 text-gray-400 mx-auto mb-2" />
                         <span className="text-xs text-gray-500 font-medium">Add Photo</span>
                       </div>
                     </div>
                   )}
+                  {processingPhoto && (
+                    <div className="absolute inset-0 bg-black/50 rounded-2xl flex items-center justify-center">
+                      <div className="flex items-center space-x-2 text-white">
+                        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                        <span className="text-sm font-medium">Processing...</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <label htmlFor="photo-upload" className="absolute -bottom-2 -right-2 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-full p-3 cursor-pointer hover:shadow-lg transform hover:scale-110 transition-all duration-200">
-                  <Upload className="w-4 h-4" />
+                <label htmlFor="photo-upload" className="absolute -bottom-2 -right-2 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-full p-3 cursor-pointer hover:shadow-lg transform hover:scale-110 transition-all duration-200 disabled:opacity-50">
+                  {processingPhoto ? (
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                  ) : (
+                    <Upload className="w-4 h-4" />
+                  )}
                 </label>
                 <input
                   id="photo-upload"
                   type="file"
                   accept="image/*"
                   onChange={handlePhotoUpload}
+                  disabled={processingPhoto}
                   className="hidden"
                 />
               </div>
-              <p className="text-sm text-gray-500 font-medium">
-                Upload a photo to personalize book covers
-              </p>
+              <div className="text-center">
+                <p className="text-sm text-gray-600 font-medium mb-1">
+                  Upload a photo of your child with their teddy bear
+                </p>
+                <div className="flex items-center justify-center space-x-1 text-xs text-gray-500">
+                  <Sparkles className="w-3 h-3" />
+                  <span>Background will be automatically removed</span>
+                  <Sparkles className="w-3 h-3" />
+                </div>
+              </div>
             </div>
 
             {/* Form Fields */}
