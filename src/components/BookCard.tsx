@@ -17,12 +17,12 @@ const BookCard: React.FC<BookCardProps> = ({ book, onClick }) => {
   const coverImage = selectedChild?.personalizedCovers?.[book.id] || book.cover;
 
   return (
-    <div className="group bg-white rounded-3xl shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:-translate-y-3 overflow-hidden cursor-pointer animate-fade-in max-w-2xl mx-auto">
+    <div className="group bg-white rounded-3xl shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:-translate-y-3 overflow-hidden cursor-pointer animate-fade-in max-w-4xl mx-auto">
       <div className="relative overflow-hidden" onClick={onClick}>
         <img
           src={coverImage}
           alt={`${book.title} book cover`}
-          className="w-full h-96 object-cover group-hover:scale-110 transition-transform duration-500"
+          className="w-full h-[500px] object-cover group-hover:scale-110 transition-transform duration-500"
           loading="lazy"
         />
         

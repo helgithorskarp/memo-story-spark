@@ -171,7 +171,10 @@ const AddChildModal: React.FC<AddChildModalProps> = ({ isOpen, onClose }) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={() => onClose()}>
-      <DialogContent className="max-w-4xl p-0 bg-gradient-to-br from-white via-memo-cream/30 to-memo-blue/10 border-0 shadow-2xl max-h-[90vh] overflow-y-auto">
+      <DialogContent 
+        className="max-w-4xl p-0 bg-gradient-to-br from-white via-memo-cream/30 to-memo-blue/10 border-0 shadow-2xl max-h-[90vh] overflow-y-auto"
+        aria-describedby="add-child-description"
+      >
         <div className="relative p-8">
           {/* Animated Background Elements */}
           <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-memo-peach/30 to-orange-400/20 rounded-full blur-3xl animate-pulse -z-10"></div>
@@ -186,7 +189,7 @@ const AddChildModal: React.FC<AddChildModalProps> = ({ isOpen, onClose }) => {
             <h2 className="text-4xl font-bold bg-gradient-to-r from-gray-800 via-purple-600 to-pink-600 bg-clip-text text-transparent font-nunito mb-3">
               Create Your Little Hero
             </h2>
-            <p className="text-lg text-gray-600 font-poppins max-w-md mx-auto">
+            <p id="add-child-description" className="text-lg text-gray-600 font-poppins max-w-md mx-auto">
               Let's bring your child and their favorite teddy bear into magical adventures
             </p>
             <Button
