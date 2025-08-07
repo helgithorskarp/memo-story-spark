@@ -17,12 +17,12 @@ const BookCard: React.FC<BookCardProps> = ({ book, onClick }) => {
   const coverImage = selectedChild?.personalizedCovers?.[book.id] || book.cover;
 
   return (
-    <div className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 overflow-hidden cursor-pointer animate-fade-in">
+    <div className="group bg-white rounded-3xl shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:-translate-y-3 overflow-hidden cursor-pointer animate-fade-in max-w-2xl mx-auto">
       <div className="relative overflow-hidden" onClick={onClick}>
         <img
           src={coverImage}
           alt={`${book.title} book cover`}
-          className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+          className="w-full h-96 object-cover group-hover:scale-110 transition-transform duration-500"
           loading="lazy"
         />
         
@@ -62,12 +62,12 @@ const BookCard: React.FC<BookCardProps> = ({ book, onClick }) => {
         </div>
       </div>
 
-      <div className="p-4" onClick={onClick}>
-        <h3 className="font-bold text-lg text-gray-800 mb-2 font-nunito group-hover:text-orange-600 transition-colors">
+      <div className="p-8" onClick={onClick}>
+        <h3 className="font-bold text-2xl text-gray-800 mb-4 font-nunito group-hover:text-orange-600 transition-colors">
           {selectedChild ? book.title.replace(/\[Child's Name\]/g, selectedChild.name) : book.title}
         </h3>
         
-        <p className="text-gray-600 text-sm mb-3 font-poppins line-clamp-2">
+        <p className="text-gray-600 text-lg mb-6 font-poppins leading-relaxed">
           {selectedChild 
             ? book.synopsis.replace(/\[Child's Name\]/g, selectedChild.name) 
             : book.synopsis.replace(/\[Child's Name\]/g, "[Your Child's Name]")
