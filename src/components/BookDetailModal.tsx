@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { X, Star, ShoppingCart, ChevronLeft, ChevronRight, User, Heart } from 'lucide-react';
 import { Book } from '@/types';
@@ -15,7 +16,6 @@ interface BookDetailModalProps {
 
 const BookDetailModal: React.FC<BookDetailModalProps> = ({ book, isOpen, onClose }) => {
   const { selectedChild, addToCart } = useApp();
-  const [selectedFormat, setSelectedFormat] = useState<'ebook' | 'hardcover'>('ebook');
   const [quantity, setQuantity] = useState(1);
   const [currentDemoPage, setCurrentDemoPage] = useState(0);
   const [isAddChildModalOpen, setIsAddChildModalOpen] = useState(false);
@@ -25,18 +25,18 @@ const BookDetailModal: React.FC<BookDetailModalProps> = ({ book, isOpen, onClose
   const demoPages = selectedChild?.personalizedPages?.[book.id] || book.demoPages;
 
   const handleAddToCart = () => {
-    const price = selectedFormat === 'ebook' ? book.price.ebook : book.price.hardcover;
+    const price = book.price.hardcover;
     
     addToCart({
       bookId: book.id,
-      format: selectedFormat,
+      format: 'hardcover',
       quantity,
       price
     });
 
     toast({
       title: "Added to cart!",
-      description: `${book.title} (${selectedFormat}) has been added to your cart.`,
+      description: `${book.title} has been added to your cart.`,
     });
   };
 
@@ -228,53 +228,21 @@ const BookDetailModal: React.FC<BookDetailModalProps> = ({ book, isOpen, onClose
                   {/* Purchase Options */}
                   <div className="bg-white border border-gray-200 rounded-2xl p-6">
                     <h3 className="text-lg font-semibold text-gray-800 mb-4 font-nunito">
-                      Choose Your Format
+                      Premium Hardcover Book
                     </h3>
                     
-                    <div className="space-y-3 mb-4">
-                      <label className="flex items-center space-x-3 p-3 border rounded-xl cursor-pointer hover:bg-gray-50 transition-colors">
-                        <input
-                          type="radio"
-                          name="format"
-                          value="ebook"
-                          checked={selectedFormat === 'ebook'}
-                          onChange={(e) => setSelectedFormat(e.target.value as 'ebook')}
-                          className="text-orange-500"
-                        />
-                        <div className="flex-1">
-                          <div className="flex justify-between items-center">
-                            <span className="font-medium">E-Book (PDF)</span>
-                            <span className="text-xl font-bold text-orange-600">
-                              ${book.price.ebook}
-                            </span>
-                          </div>
-                          <p className="text-sm text-gray-500">
-                            Instant download, read on any device
-                          </p>
-                        </div>
-                      </label>
-                      
-                      <label className="flex items-center space-x-3 p-3 border rounded-xl cursor-pointer hover:bg-gray-50 transition-colors">
-                        <input
-                          type="radio"
-                          name="format"
-                          value="hardcover"
-                          checked={selectedFormat === 'hardcover'}
-                          onChange={(e) => setSelectedFormat(e.target.value as 'hardcover')}
-                          className="text-orange-500"
-                        />
-                        <div className="flex-1">
-                          <div className="flex justify-between items-center">
-                            <span className="font-medium">Physical Hardcover</span>
-                            <span className="text-xl font-bold text-orange-600">
-                              ${book.price.hardcover}
-                            </span>
-                          </div>
-                          <p className="text-sm text-gray-500">
+                    <div className="bg-orange-50 border border-orange-200 rounded-xl p-4 mb-4">
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <span className="font-semibold text-gray-900">Physical Hardcover</span>
+                          <p className="text-sm text-gray-600 mt-1">
                             High-quality keepsake, ships in 3-5 days
                           </p>
                         </div>
-                      </label>
+                        <span className="text-2xl font-bold text-orange-600">
+                          ${book.price.hardcover}
+                        </span>
+                      </div>
                     </div>
 
                     <div className="flex items-center space-x-4 mb-4">
@@ -305,7 +273,7 @@ const BookDetailModal: React.FC<BookDetailModalProps> = ({ book, isOpen, onClose
                       className="w-full bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
                     >
                       <ShoppingCart className="w-5 h-5 mr-2" />
-                      Add to Cart - ${selectedFormat === 'ebook' ? book.price.ebook * quantity : book.price.hardcover * quantity}
+                      Add to Cart - ${(book.price.hardcover * quantity).toFixed(2)}
                     </Button>
                   </div>
 
