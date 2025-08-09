@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { X, Upload, Camera, Heart, Sparkles, ImageIcon } from 'lucide-react';
+import { X, Upload, Camera, Heart, User, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -54,8 +54,8 @@ const AddChildModal: React.FC<AddChildModalProps> = ({ isOpen, onClose }) => {
       setLoading(true);
       if (formData.childPhoto || formData.teddyPhoto) {
         toast({ 
-          title: 'Processing your photos...', 
-          description: 'Creating personalized book covers. This may take a moment.' 
+          title: 'Creating personalized covers...', 
+          description: 'This will just take a moment.' 
         });
 
         // Process the images for personalized covers
@@ -64,9 +64,7 @@ const AddChildModal: React.FC<AddChildModalProps> = ({ isOpen, onClose }) => {
 
         // Use child photo for all book covers if available
         if (formData.childPhoto) {
-          personalizedCovers['1'] = formData.childPhoto; // Frozen
-          personalizedCovers['2'] = formData.childPhoto; // Cinderella
-          personalizedCovers['3'] = formData.childPhoto; // Career book
+          personalizedCovers['1'] = formData.childPhoto;
         }
 
         // For demo pages, combine child and teddy photos if available
@@ -86,11 +84,11 @@ const AddChildModal: React.FC<AddChildModalProps> = ({ isOpen, onClose }) => {
       setSelectedChild(newChild);
       toast({
         title: 'Success!',
-        description: `All books now feature ${newChild.name}. Ready to start their adventure!`,
+        description: `${newChild.name} is now the star of the story!`,
       });
       onClose();
     } catch (error: unknown) {
-      const message = error instanceof Error ? error.message : 'Failed to personalize images.';
+      const message = error instanceof Error ? error.message : 'Failed to create profile.';
       toast({ title: 'Error', description: message, variant: 'destructive' });
     } finally {
       setLoading(false);
@@ -103,8 +101,8 @@ const AddChildModal: React.FC<AddChildModalProps> = ({ isOpen, onClose }) => {
       try {
         setProcessingChild(true);
         toast({
-          title: 'Processing child photo...',
-          description: 'Removing background and preparing photo for the stories.',
+          title: 'Processing photo...',
+          description: 'Preparing your child\'s photo for the story.',
         });
 
         const imageElement = await loadImage(file);
@@ -114,8 +112,8 @@ const AddChildModal: React.FC<AddChildModalProps> = ({ isOpen, onClose }) => {
         reader.onload = (event) => {
           setFormData(prev => ({ ...prev, childPhoto: event.target?.result as string }));
           toast({
-            title: 'Child photo processed!',
-            description: 'Ready to star in their personalized books.',
+            title: 'Photo ready!',
+            description: 'Your child is ready to star in their book.',
           });
         };
         reader.readAsDataURL(processedBlob);
@@ -123,8 +121,8 @@ const AddChildModal: React.FC<AddChildModalProps> = ({ isOpen, onClose }) => {
       } catch (error) {
         console.error('Error processing child photo:', error);
         toast({
-          title: 'Processing failed',
-          description: 'Could not process the photo. Please try a different image.',
+          title: 'Upload failed',
+          description: 'Could not process the photo. Please try again.',
           variant: 'destructive'
         });
       } finally {
@@ -139,8 +137,8 @@ const AddChildModal: React.FC<AddChildModalProps> = ({ isOpen, onClose }) => {
       try {
         setProcessingTeddy(true);
         toast({
-          title: 'Processing teddy bear photo...',
-          description: 'Removing background and preparing teddy for the stories.',
+          title: 'Processing teddy photo...',
+          description: 'Getting teddy ready for the adventure.',
         });
 
         const imageElement = await loadImage(file);
@@ -150,8 +148,8 @@ const AddChildModal: React.FC<AddChildModalProps> = ({ isOpen, onClose }) => {
         reader.onload = (event) => {
           setFormData(prev => ({ ...prev, teddyPhoto: event.target?.result as string }));
           toast({
-            title: 'Teddy bear photo processed!',
-            description: 'Ready to join the adventure.',
+            title: 'Teddy ready!',
+            description: 'Teddy is ready to join the story.',
           });
         };
         reader.readAsDataURL(processedBlob);
@@ -159,8 +157,8 @@ const AddChildModal: React.FC<AddChildModalProps> = ({ isOpen, onClose }) => {
       } catch (error) {
         console.error('Error processing teddy photo:', error);
         toast({
-          title: 'Processing failed',
-          description: 'Could not process the teddy photo. Please try a different image.',
+          title: 'Upload failed',
+          description: 'Could not process the teddy photo. Please try again.',
           variant: 'destructive'
         });
       } finally {
@@ -172,277 +170,207 @@ const AddChildModal: React.FC<AddChildModalProps> = ({ isOpen, onClose }) => {
   return (
     <Dialog open={isOpen} onOpenChange={() => onClose()}>
       <DialogContent 
-        className="max-w-4xl p-0 bg-gradient-to-br from-white via-memo-cream/30 to-memo-blue/10 border-0 shadow-2xl max-h-[90vh] overflow-y-auto"
+        className="max-w-2xl p-0 bg-white border-0 shadow-xl"
         aria-describedby="add-child-description"
       >
-        <div className="relative p-8">
-          {/* Animated Background Elements */}
-          <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-memo-peach/30 to-orange-400/20 rounded-full blur-3xl animate-pulse -z-10"></div>
-          <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-br from-memo-blue/30 to-blue-400/20 rounded-full blur-2xl animate-pulse -z-10" style={{animationDelay: '1s'}}></div>
-          <div className="absolute top-1/2 left-1/4 w-20 h-20 bg-gradient-to-br from-pink-300/20 to-purple-300/20 rounded-full blur-xl animate-bounce -z-10" style={{animationDelay: '2s'}}></div>
-          
+        <div className="p-8">
           {/* Header */}
-          <div className="text-center mb-10">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-orange-400 via-pink-500 to-purple-600 rounded-full mb-6 shadow-xl animate-bounce">
-              <Heart className="w-10 h-10 text-white" />
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-orange-100 rounded-full mb-4">
+              <User className="w-8 h-8 text-orange-600" />
             </div>
-            <h2 className="text-4xl font-bold bg-gradient-to-r from-gray-800 via-purple-600 to-pink-600 bg-clip-text text-transparent font-nunito mb-3">
-              Create Your Little Hero
+            <h2 className="text-3xl font-bold text-gray-900 mb-2">
+              Add Your Child
             </h2>
-            <p id="add-child-description" className="text-lg text-gray-600 font-poppins max-w-md mx-auto">
-              Let's bring your child and their favorite teddy bear into magical adventures
+            <p id="add-child-description" className="text-gray-600">
+              Create a personalized story starring your little one
             </p>
             <Button
               variant="ghost"
               size="sm"
               onClick={onClose}
-              className="absolute top-6 right-6 h-12 w-12 p-0 rounded-full hover:bg-gray-100/80 backdrop-blur-sm"
+              className="absolute top-4 right-4 h-10 w-10 p-0"
             >
-              <X className="w-6 h-6" />
+              <X className="w-5 h-5" />
             </Button>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-10">
-            {/* Photo Upload Section */}
-            <div className="bg-white/60 backdrop-blur-sm rounded-3xl p-8 border border-white/40 shadow-lg">
-              <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center font-nunito">
-                📸 Add Photos
-              </h3>
-              
-              <div className="grid md:grid-cols-2 gap-8">
-                {/* Child Photo */}
-                <div className="text-center">
-                  <div className="relative inline-block mb-4">
-                    <div className="relative group">
-                      {formData.childPhoto ? (
-                        <div className="relative overflow-hidden rounded-3xl">
-                          <img
-                            src={formData.childPhoto}
-                            alt="Child photo"
-                            className="w-40 h-40 object-cover border-4 border-gradient-to-r from-orange-400 to-pink-500 shadow-2xl"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
-                            <span className="text-white font-semibold text-sm">Change Photo</span>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="w-40 h-40 rounded-3xl bg-gradient-to-br from-memo-cream via-orange-100 to-pink-100 border-4 border-dashed border-orange-300 flex items-center justify-center group-hover:shadow-2xl group-hover:border-orange-400 transition-all duration-300">
-                          <div className="text-center">
-                            <Camera className="w-12 h-12 text-orange-400 mx-auto mb-3" />
-                            <span className="text-sm text-gray-600 font-semibold">Your Child</span>
-                          </div>
-                        </div>
-                      )}
-                      {processingChild && (
-                        <div className="absolute inset-0 bg-gradient-to-br from-orange-500/80 to-pink-500/80 rounded-3xl flex items-center justify-center">
-                          <div className="flex flex-col items-center space-y-2 text-white">
-                            <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
-                            <span className="text-sm font-semibold">Processing...</span>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    <label htmlFor="child-photo" className="absolute -bottom-3 -right-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-full p-4 cursor-pointer hover:shadow-xl transform hover:scale-110 transition-all duration-200 disabled:opacity-50">
-                      {processingChild ? (
-                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                      ) : (
-                        <Upload className="w-5 h-5" />
-                      )}
-                    </label>
-                    <input
-                      id="child-photo"
-                      type="file"
-                      accept="image/*"
-                      onChange={handleChildPhotoUpload}
-                      disabled={processingChild}
-                      className="hidden"
-                    />
-                  </div>
-                  <div className="text-center">
-                    <h4 className="text-lg font-bold text-gray-800 mb-2">👶 Child Photo</h4>
-                    <p className="text-sm text-gray-600 mb-1">Upload your little hero</p>
-                    <div className="flex items-center justify-center space-x-1 text-xs text-gray-500">
-                      <Sparkles className="w-3 h-3" />
-                      <span>Auto background removal</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Teddy Bear Photo */}
-                <div className="text-center">
-                  <div className="relative inline-block mb-4">
-                    <div className="relative group">
-                      {formData.teddyPhoto ? (
-                        <div className="relative overflow-hidden rounded-3xl">
-                          <img
-                            src={formData.teddyPhoto}
-                            alt="Teddy bear photo"
-                            className="w-40 h-40 object-cover border-4 border-gradient-to-r from-blue-400 to-purple-500 shadow-2xl"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
-                            <span className="text-white font-semibold text-sm">Change Photo</span>
-                          </div>
-                        </div>
-                      ) : (
-                        <div className="w-40 h-40 rounded-3xl bg-gradient-to-br from-memo-blue/20 via-blue-100 to-purple-100 border-4 border-dashed border-blue-300 flex items-center justify-center group-hover:shadow-2xl group-hover:border-blue-400 transition-all duration-300">
-                          <div className="text-center">
-                            <Heart className="w-12 h-12 text-blue-400 mx-auto mb-3" />
-                            <span className="text-sm text-gray-600 font-semibold">Teddy Bear</span>
-                          </div>
-                        </div>
-                      )}
-                      {processingTeddy && (
-                        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/80 to-purple-500/80 rounded-3xl flex items-center justify-center">
-                          <div className="flex flex-col items-center space-y-2 text-white">
-                            <div className="w-8 h-8 border-4 border-white/30 border-t-white rounded-full animate-spin"></div>
-                            <span className="text-sm font-semibold">Processing...</span>
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                    <label htmlFor="teddy-photo" className="absolute -bottom-3 -right-3 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-full p-4 cursor-pointer hover:shadow-xl transform hover:scale-110 transition-all duration-200 disabled:opacity-50">
-                      {processingTeddy ? (
-                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                      ) : (
-                        <Upload className="w-5 h-5" />
-                      )}
-                    </label>
-                    <input
-                      id="teddy-photo"
-                      type="file"
-                      accept="image/*"
-                      onChange={handleTeddyPhotoUpload}
-                      disabled={processingTeddy}
-                      className="hidden"
-                    />
-                  </div>
-                  <div className="text-center">
-                    <h4 className="text-lg font-bold text-gray-800 mb-2">🧸 Teddy Bear</h4>
-                    <p className="text-sm text-gray-600 mb-1">Their faithful companion</p>
-                    <div className="flex items-center justify-center space-x-1 text-xs text-gray-500">
-                      <Sparkles className="w-3 h-3" />
-                      <span>Auto background removal</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Name Input */}
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                Child's Name *
+              </label>
+              <Input
+                id="name"
+                type="text"
+                value={formData.name}
+                onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                placeholder="Enter your child's name"
+                className="w-full h-12 text-base"
+                required
+              />
             </div>
 
-            {/* Form Fields */}
-            <div className="bg-white/60 backdrop-blur-sm rounded-3xl p-8 border border-white/40 shadow-lg">
-              <h3 className="text-2xl font-bold text-gray-800 mb-6 text-center font-nunito">
-                ✨ Character Details
-              </h3>
-              
-              <div className="grid md:grid-cols-3 gap-6">
-                {/* Name */}
-                <div className="md:col-span-3">
-                  <label htmlFor="name" className="block text-lg font-bold text-gray-700 mb-3">
-                    Child's Name *
-                  </label>
-                  <Input
-                    id="name"
-                    type="text"
-                    value={formData.name}
-                    onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                    placeholder="Enter your child's name"
-                    className="w-full h-14 text-lg border-3 border-gray-200 rounded-2xl focus:border-orange-400 focus:ring-orange-400/20 bg-white/90 backdrop-blur-sm font-semibold"
-                    required
+            {/* Photo Uploads */}
+            <div className="grid grid-cols-2 gap-6">
+              {/* Child Photo */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Child Photo
+                </label>
+                <div className="relative">
+                  {formData.childPhoto ? (
+                    <div className="relative group">
+                      <img
+                        src={formData.childPhoto}
+                        alt="Child photo"
+                        className="w-full h-32 object-cover rounded-lg border-2 border-gray-200"
+                      />
+                      <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 rounded-lg transition-all duration-200 flex items-center justify-center">
+                        <Camera className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="w-full h-32 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center hover:border-gray-400 transition-colors">
+                      <Camera className="w-6 h-6 text-gray-400 mb-1" />
+                      <span className="text-xs text-gray-500">Add photo</span>
+                    </div>
+                  )}
+                  
+                  {processingChild && (
+                    <div className="absolute inset-0 bg-white bg-opacity-90 rounded-lg flex items-center justify-center">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-4 h-4 border-2 border-orange-600 border-t-transparent rounded-full animate-spin"></div>
+                        <span className="text-sm text-gray-600">Processing...</span>
+                      </div>
+                    </div>
+                  )}
+                  
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleChildPhotoUpload}
+                    disabled={processingChild}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                   />
                 </div>
+                <p className="text-xs text-gray-500 mt-1 flex items-center">
+                  <Sparkles className="w-3 h-3 mr-1" />
+                  Background automatically removed
+                </p>
+              </div>
 
-                {/* Pronouns */}
-                <div>
-                  <label htmlFor="pronouns" className="block text-lg font-bold text-gray-700 mb-3">
-                    Pronouns
-                  </label>
-                  <select
-                    id="pronouns"
-                    value={formData.pronouns}
-                    onChange={(e) => setFormData(prev => ({ ...prev, pronouns: e.target.value }))}
-                    className="w-full h-14 px-4 border-3 border-gray-200 rounded-2xl focus:outline-none focus:border-orange-400 bg-white/90 backdrop-blur-sm text-gray-700 font-semibold"
-                  >
-                    <option value="they/them">they/them</option>
-                    <option value="she/her">she/her</option>
-                    <option value="he/him">he/him</option>
-                  </select>
+              {/* Teddy Photo */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Teddy Bear (Optional)
+                </label>
+                <div className="relative">
+                  {formData.teddyPhoto ? (
+                    <div className="relative group">
+                      <img
+                        src={formData.teddyPhoto}
+                        alt="Teddy bear photo"
+                        className="w-full h-32 object-cover rounded-lg border-2 border-gray-200"
+                      />
+                      <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 rounded-lg transition-all duration-200 flex items-center justify-center">
+                        <Camera className="w-6 h-6 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="w-full h-32 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center hover:border-gray-400 transition-colors">
+                      <Heart className="w-6 h-6 text-gray-400 mb-1" />
+                      <span className="text-xs text-gray-500">Add teddy</span>
+                    </div>
+                  )}
+                  
+                  {processingTeddy && (
+                    <div className="absolute inset-0 bg-white bg-opacity-90 rounded-lg flex items-center justify-center">
+                      <div className="flex items-center space-x-2">
+                        <div className="w-4 h-4 border-2 border-orange-600 border-t-transparent rounded-full animate-spin"></div>
+                        <span className="text-sm text-gray-600">Processing...</span>
+                      </div>
+                    </div>
+                  )}
+                  
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleTeddyPhotoUpload}
+                    disabled={processingTeddy}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  />
                 </div>
-
-                {/* Favorite Color */}
-                <div className="md:col-span-2">
-                  <label htmlFor="color" className="block text-lg font-bold text-gray-700 mb-3">
-                    Favorite Color
-                  </label>
-                  <select
-                    id="color"
-                    value={formData.favoriteColor}
-                    onChange={(e) => setFormData(prev => ({ ...prev, favoriteColor: e.target.value }))}
-                    className="w-full h-14 px-4 border-3 border-gray-200 rounded-2xl focus:outline-none focus:border-orange-400 bg-white/90 backdrop-blur-sm text-gray-700 font-semibold"
-                  >
-                    <option value="red">❤️ Red</option>
-                    <option value="blue">💙 Blue</option>
-                    <option value="green">💚 Green</option>
-                    <option value="purple">💜 Purple</option>
-                    <option value="pink">🩷 Pink</option>
-                    <option value="yellow">💛 Yellow</option>
-                    <option value="orange">🧡 Orange</option>
-                    <option value="rainbow">🌈 Rainbow</option>
-                  </select>
-                </div>
+                <p className="text-xs text-gray-500 mt-1 flex items-center">
+                  <Sparkles className="w-3 h-3 mr-1" />
+                  Background automatically removed
+                </p>
               </div>
             </div>
 
-            {/* Benefits Card */}
-            <div className="bg-gradient-to-r from-white/80 via-memo-cream/60 to-white/80 backdrop-blur-sm p-8 rounded-3xl border-2 border-memo-peach/30 shadow-xl">
-              <h3 className="font-bold text-gray-800 mb-6 font-nunito text-2xl text-center flex items-center justify-center">
-                <span className="mr-3">🎉</span>
-                What happens next?
-                <span className="ml-3">🎉</span>
-              </h3>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div className="flex items-center space-x-4 p-4 bg-white/60 rounded-2xl">
-                  <span className="text-3xl">🌟</span>
-                  <span className="text-gray-700 font-semibold">Becomes the story hero</span>
-                </div>
-                <div className="flex items-center space-x-4 p-4 bg-white/60 rounded-2xl">
-                  <span className="text-3xl">📖</span>
-                  <span className="text-gray-700 font-semibold">Personalized previews</span>
-                </div>
-                <div className="flex items-center space-x-4 p-4 bg-white/60 rounded-2xl">
-                  <span className="text-3xl">🎨</span>
-                  <span className="text-gray-700 font-semibold">Custom artwork</span>
-                </div>
-                <div className="flex items-center space-x-4 p-4 bg-white/60 rounded-2xl">
-                  <span className="text-3xl">💝</span>
-                  <span className="text-gray-700 font-semibold">Lasting memories</span>
-                </div>
+            {/* Quick Settings */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label htmlFor="pronouns" className="block text-sm font-medium text-gray-700 mb-2">
+                  Pronouns
+                </label>
+                <select
+                  id="pronouns"
+                  value={formData.pronouns}
+                  onChange={(e) => setFormData(prev => ({ ...prev, pronouns: e.target.value }))}
+                  className="w-full h-12 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                >
+                  <option value="they/them">they/them</option>
+                  <option value="she/her">she/her</option>
+                  <option value="he/him">he/him</option>
+                </select>
+              </div>
+
+              <div>
+                <label htmlFor="color" className="block text-sm font-medium text-gray-700 mb-2">
+                  Favorite Color
+                </label>
+                <select
+                  id="color"
+                  value={formData.favoriteColor}
+                  onChange={(e) => setFormData(prev => ({ ...prev, favoriteColor: e.target.value }))}
+                  className="w-full h-12 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                >
+                  <option value="red">❤️ Red</option>
+                  <option value="blue">💙 Blue</option>
+                  <option value="green">💚 Green</option>
+                  <option value="purple">💜 Purple</option>
+                  <option value="pink">🩷 Pink</option>
+                  <option value="yellow">💛 Yellow</option>
+                  <option value="orange">🧡 Orange</option>
+                  <option value="rainbow">🌈 Rainbow</option>
+                </select>
               </div>
             </div>
 
             {/* Action Buttons */}
-            <div className="flex space-x-6 pt-4">
+            <div className="flex space-x-4 pt-4">
               <Button
                 type="button"
                 variant="outline"
                 onClick={onClose}
-                className="flex-1 h-16 border-3 border-gray-300 hover:border-gray-400 rounded-2xl font-bold text-lg"
+                className="flex-1 h-12"
               >
                 Cancel
               </Button>
               <Button
                 type="submit"
                 disabled={loading || processingChild || processingTeddy}
-                className="flex-1 h-16 bg-gradient-to-r from-orange-500 via-pink-500 to-purple-600 hover:from-orange-600 hover:via-pink-600 hover:to-purple-700 text-white font-bold text-lg rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-[1.02] transition-all duration-200"
+                className="flex-1 h-12 bg-orange-600 hover:bg-orange-700 text-white"
               >
                 {loading ? (
-                  <div className="flex items-center space-x-3">
-                    <div className="w-6 h-6 border-3 border-white/30 border-t-white rounded-full animate-spin"></div>
-                    <span>Creating Magic...</span>
+                  <div className="flex items-center space-x-2">
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    <span>Creating...</span>
                   </div>
                 ) : (
-                  <>
-                    {selectedChild ? '✨ Update' : '🎉 Create'} Profile
-                  </>
+                  `${selectedChild ? 'Update' : 'Create'} Profile`
                 )}
               </Button>
             </div>
