@@ -1,4 +1,3 @@
-
 export interface Book {
   id: string;
   title: string;
@@ -10,6 +9,7 @@ export interface Book {
   demoPages: string[];
   language: string;
   price: {
+    ebook: number;
     hardcover: number;
   };
 }

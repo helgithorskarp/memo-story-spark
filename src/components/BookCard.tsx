@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Star, Eye } from 'lucide-react';
 import { Book } from '@/types';
@@ -95,9 +96,13 @@ const BookCard: React.FC<BookCardProps> = ({ book, onClick }) => {
         </div>
 
         <div className="mt-3 pt-3 border-t border-gray-100">
-          <div className="flex justify-between items-center text-lg">
+          <div className="flex justify-between items-center text-sm">
+            <span className="text-gray-500">E-book</span>
+            <span className="font-semibold text-gray-800">${book.price.ebook}</span>
+          </div>
+          <div className="flex justify-between items-center text-sm mt-1">
             <span className="text-gray-500">Hardcover</span>
-            <span className="font-bold text-orange-600">${book.price.hardcover}</span>
+            <span className="font-semibold text-gray-800">${book.price.hardcover}</span>
           </div>
         </div>
       </div>

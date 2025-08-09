@@ -21,7 +21,8 @@ export const books: Book[] = [
     ],
     language: 'English',
     price: {
-      hardcover: 39.99
+      ebook: 19,
+      hardcover: 49
     }
   }
 ];
