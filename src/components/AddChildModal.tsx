@@ -185,14 +185,6 @@ const AddChildModal: React.FC<AddChildModalProps> = ({ isOpen, onClose }) => {
             <p id="add-child-description" className="text-gray-600">
               Create a personalized story starring your little one
             </p>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onClose}
-              className="absolute top-4 right-4 h-10 w-10 p-0"
-            >
-              <X className="w-5 h-5" />
-            </Button>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -319,7 +311,7 @@ const AddChildModal: React.FC<AddChildModalProps> = ({ isOpen, onClose }) => {
                   id="pronouns"
                   value={formData.pronouns}
                   onChange={(e) => setFormData(prev => ({ ...prev, pronouns: e.target.value }))}
-                  className="w-full h-12 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full h-12 px-4 bg-white border border-gray-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-gray-800 font-medium transition-all duration-200 hover:shadow-md"
                 >
                   <option value="they/them">they/them</option>
                   <option value="she/her">she/her</option>
@@ -335,7 +327,7 @@ const AddChildModal: React.FC<AddChildModalProps> = ({ isOpen, onClose }) => {
                   id="color"
                   value={formData.favoriteColor}
                   onChange={(e) => setFormData(prev => ({ ...prev, favoriteColor: e.target.value }))}
-                  className="w-full h-12 px-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  className="w-full h-12 px-4 bg-white border border-gray-200 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-gray-800 font-medium transition-all duration-200 hover:shadow-md"
                 >
                   <option value="red">❤️ Red</option>
                   <option value="blue">💙 Blue</option>
