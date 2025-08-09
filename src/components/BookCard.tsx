@@ -16,10 +16,7 @@ const BookCard: React.FC<BookCardProps> = ({ book, onClick }) => {
   const coverImage = selectedChild?.personalizedCovers?.[book.id] || book.cover;
 
   return (
-    <div
-      // Made the card ~1.8× wider by increasing the max width from Tailwind's 7xl (80rem) to 144rem
-      className="group bg-white rounded-3xl shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:-translate-y-3 overflow-hidden cursor-pointer animate-fade-in w-full max-w-[144rem] mx-auto"
-    >
+    <div className="group bg-white rounded-3xl shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:-translate-y-3 overflow-hidden cursor-pointer animate-fade-in max-w-4xl mx-auto">
       <div className="relative overflow-hidden" onClick={onClick}>
         <img
           src={coverImage}
@@ -38,7 +35,7 @@ const BookCard: React.FC<BookCardProps> = ({ book, onClick }) => {
           </div>
         )}
 
-        {/* Age badges ss*/}
+        {/* Age badge */}
         <div className="absolute top-3 right-3">
           <span className="bg-memo-peach text-gray-800 text-xs font-semibold px-2 py-1 rounded-full">
             Ages {book.ageRange}
