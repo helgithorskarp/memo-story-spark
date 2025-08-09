@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { X, Upload, Camera, Heart, User, Sparkles } from 'lucide-react';
+import { Upload, Camera, Heart, User, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -185,14 +185,6 @@ const AddChildModal: React.FC<AddChildModalProps> = ({ isOpen, onClose }) => {
             <p id="add-child-description" className="text-gray-600">
               Create a personalized story starring your little one
             </p>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={onClose}
-              className="absolute top-4 right-4 h-10 w-10 p-0"
-            >
-              <X className="w-5 h-5" />
-            </Button>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
